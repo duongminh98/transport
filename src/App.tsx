@@ -6,6 +6,13 @@ import { ChatInput } from './components/ChatInput';
 import { useChat } from './hooks/useChat';
 import { availableModels } from './data/models';
 
+/**
+ * Root application component that renders the AI Assistant user interface with model selection, chat area, and a last-question sidebar.
+ *
+ * The component manages the selected model, derives the most recent user message for display, shows a conditional "Clear Chat" control when messages exist, and disables input while loading or when no model is selected.
+ *
+ * @returns A React element containing the full chat application UI (header, model selector, last-question sidebar, chat area with input, and footer).
+ */
 function App() {
   const [selectedModel, setSelectedModel] = React.useState('gpt-4-turbo');
   const { messages, isLoading, sendMessage, clearChat } = useChat(selectedModel);
