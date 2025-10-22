@@ -10,6 +10,15 @@ function App() {
   const [selectedModel, setSelectedModel] = React.useState('gpt-4-turbo');
   const { messages, isLoading, sendMessage, clearChat } = useChat(selectedModel);
 
+  // Get the last user message (question)
+  const lastUserMessage = React.useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === 'user') {
+        return messages[i];
+      }
+    }
+    return undefined;
+  }, [messages]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
@@ -47,8 +56,21 @@ function App() {
           />
         </div>
 
-        {/* Main Content */}
+        {/* Main Content with Sidebar */}
         <div className="flex-1 flex bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+          {/* Left Sidebar for Last Question */}
+          <div className="w-1/4 bg-white/10 border-r border-white/10 p-4 flex flex-col items-start justify-start">
+            <h2 className="text-sm font-semibold text-gray-300 mb-2">Last Question</h2>
+            {lastUserMessage ? (
+              <div
+                className="text-gray-100 text-base break-words"
+                dangerouslySetInnerHTML={{ __html: lastUserMessage.content }}
+              />
+            ) : (
+              <div className="text-gray-400 text-sm">No question asked yet.</div>
+            )}
+          </div>
+
           {/* Chat Area */}
           <div className="flex-1 flex flex-col">
             <ChatArea messages={messages} isLoading={isLoading} />
